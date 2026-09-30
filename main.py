@@ -59,87 +59,95 @@ music_data = {
 }
 
 # --------------------------------------------------
-# 기분별 배경
+# 기분별 배경색
 # --------------------------------------------------
 
 mood_backgrounds = {
     "행복해요": "linear-gradient(135deg, #FFF4B8 0%, #FFD6E7 100%)",
+
     "기분이 좋아요": "linear-gradient(135deg, #D9F5FF 0%, #D9E7FF 100%)",
+
     "평범해요": "linear-gradient(135deg, #F1E7FF 0%, #E7EFFF 100%)",
+
     "우울해요": "linear-gradient(135deg, #DCEBFF 0%, #C9D9F5 100%)",
+
     "스트레스 받아요": "linear-gradient(135deg, #FFE2D1 0%, #FFD0D8 100%)"
 }
 
 # --------------------------------------------------
-# 전체 디자인
+# 기본 디자인
 # --------------------------------------------------
 
-st.markdown("""
-<style>
+st.markdown(
+    """
+    <style>
 
-.stApp {
-    transition: background 0.8s ease;
-}
+    .stApp {
+        transition: background 0.8s ease;
+    }
 
-.title {
-    text-align: center;
-    font-size: 42px;
-    font-weight: 800;
-    color: #6c63ff;
-    margin-top: 10px;
-    margin-bottom: 5px;
-}
+    .title {
+        text-align: center;
+        font-size: 42px;
+        font-weight: 800;
+        color: #6c63ff;
+        margin-top: 10px;
+        margin-bottom: 5px;
+    }
 
-.subtitle {
-    text-align: center;
-    font-size: 17px;
-    color: #666;
-    margin-bottom: 30px;
-}
+    .subtitle {
+        text-align: center;
+        font-size: 17px;
+        color: #666;
+        margin-bottom: 30px;
+    }
 
-.music-card {
-    background: rgba(255,255,255,0.88);
-    padding: 25px;
-    border-radius: 25px;
-    box-shadow: 0 8px 25px rgba(0,0,0,0.08);
-    text-align: center;
-    margin-top: 15px;
-}
+    .music-card {
+        background: rgba(255,255,255,0.88);
+        padding: 25px;
+        border-radius: 25px;
+        box-shadow: 0 8px 25px rgba(0,0,0,0.08);
+        text-align: center;
+        margin-top: 15px;
+    }
 
-.music-title {
-    font-size: 28px;
-    font-weight: 700;
-    color: #333;
-    margin-top: 5px;
-}
+    .music-title {
+        font-size: 28px;
+        font-weight: 700;
+        color: #333;
+        margin-top: 5px;
+    }
 
-.artist {
-    font-size: 17px;
-    color: #777;
-    margin-top: 5px;
-}
+    .artist {
+        font-size: 17px;
+        color: #777;
+        margin-top: 5px;
+    }
 
-.reason {
-    background: rgba(245,243,255,0.9);
-    padding: 16px;
-    border-radius: 15px;
-    color: #555;
-    line-height: 1.8;
-    margin-top: 18px;
-}
+    .reason {
+        background: rgba(245,243,255,0.9);
+        padding: 16px;
+        border-radius: 15px;
+        color: #555;
+        line-height: 1.8;
+        margin-top: 18px;
+    }
 
-.footer {
-    text-align: center;
-    color: #777;
-    font-size: 13px;
-    margin-top: 40px;
-}
+    .footer {
+        text-align: center;
+        color: #777;
+        font-size: 13px;
+        margin-top: 40px;
+        margin-bottom: 20px;
+    }
 
-</style>
-""", unsafe_allow_html=True)
+    </style>
+    """,
+    unsafe_allow_html=True
+)
 
 # --------------------------------------------------
-# 기분 선택
+# 제목
 # --------------------------------------------------
 
 st.markdown(
@@ -151,6 +159,10 @@ st.markdown(
     '<div class="subtitle">지금 나의 기분과 컨디션에 딱 맞는 음악을 찾아보세요 ✨</div>',
     unsafe_allow_html=True
 )
+
+# --------------------------------------------------
+# 기분 선택
+# --------------------------------------------------
 
 st.markdown("### 💭 지금 기분은 어떤가요?")
 
@@ -167,7 +179,7 @@ mood = st.selectbox(
 )
 
 # --------------------------------------------------
-# 선택한 기분에 따라 배경 변경
+# 기분에 따른 배경색
 # --------------------------------------------------
 
 background = mood_backgrounds[mood]
@@ -184,7 +196,7 @@ st.markdown(
 )
 
 # --------------------------------------------------
-# 현재 기분 표시
+# 선택한 기분 표시
 # --------------------------------------------------
 
 st.markdown(
@@ -220,7 +232,7 @@ energy = st.radio(
 )
 
 # --------------------------------------------------
-# 음악 분위기
+# 음악 분위기 선택
 # --------------------------------------------------
 
 st.markdown("### 🎶 어떤 음악을 듣고 싶나요?")
@@ -237,7 +249,7 @@ style = st.select_slider(
 )
 
 # --------------------------------------------------
-# 추천 버튼
+# 음악 추천
 # --------------------------------------------------
 
 if st.button(
@@ -249,6 +261,7 @@ if st.button(
 
     # 피곤할 때
     if "피곤" in energy:
+
         songs = [
             ("밤편지", "아이유"),
             ("Ditto", "NewJeans"),
@@ -257,8 +270,9 @@ if st.button(
             ("Love Lee", "AKMU")
         ]
 
-    # 에너지가 많을 때
+    # 에너지가 넘칠 때
     elif "에너지가 넘쳐요" in energy:
+
         songs = [
             ("Dynamite", "BTS"),
             ("Super Shy", "NewJeans"),
@@ -269,11 +283,13 @@ if st.button(
 
     song, artist = random.choice(songs)
 
+    # 세션 저장
     st.session_state["song"] = song
     st.session_state["artist"] = artist
     st.session_state["mood"] = mood
     st.session_state["energy"] = energy
     st.session_state["style"] = style
+
 
 # --------------------------------------------------
 # 추천 결과
@@ -289,7 +305,7 @@ if "song" in st.session_state:
     st.markdown("### 💖 오늘의 추천 음악")
 
     # --------------------------------------------------
-    # iTunes에서 앨범 이미지 자동 검색
+    # iTunes에서 썸네일 자동 검색
     # --------------------------------------------------
 
     artwork_url = None
@@ -313,12 +329,14 @@ if "song" in st.session_state:
 
             if data.get("results"):
 
-                artwork_url = data["results"][0].get(
+                result = data["results"][0]
+
+                artwork_url = result.get(
                     "artworkUrl100"
                 )
 
-                # 작은 100x100 이미지를 큰 이미지로 변경
                 if artwork_url:
+
                     artwork_url = artwork_url.replace(
                         "100x100",
                         "600x600"
@@ -328,7 +346,7 @@ if "song" in st.session_state:
         artwork_url = None
 
     # --------------------------------------------------
-    # 썸네일
+    # 썸네일 표시
     # --------------------------------------------------
 
     if artwork_url:
@@ -388,16 +406,40 @@ if "song" in st.session_state:
     )
 
     # --------------------------------------------------
-    # 음악 검색
+    # Spotify / 여기서 듣기
     # --------------------------------------------------
 
-    search_query = f"{song} {artist}".replace(" ", "+")
-
-    st.link_button(
-        "🎧 이 음악 검색해서 듣기",
-        f"https://www.youtube.com/results?search_query={search_query}",
-        use_container_width=True
+    spotify_query = (
+        f"{song} {artist}"
+        .replace(" ", "%20")
     )
+
+    col1, col2 = st.columns(2)
+
+    # Spotify
+    with col1:
+
+        st.link_button(
+            "🟢 Spotify에서 듣기",
+            f"https://open.spotify.com/search/{spotify_query}",
+            use_container_width=True
+        )
+
+    # 여기서 듣기
+    with col2:
+
+        if st.button(
+            "🎵 여기서 듣기",
+            use_container_width=True
+        ):
+
+            # chat.py로 전달할 음악 정보
+            st.query_params["song"] = song
+            st.query_params["artist"] = artist
+
+            st.switch_page(
+                "pages/chat.py"
+            )
 
     # --------------------------------------------------
     # 다른 음악 추천
@@ -407,10 +449,16 @@ if "song" in st.session_state:
         "🔄 다른 음악 추천",
         use_container_width=True
     ):
+
+        # 기존 추천 음악 삭제
+        st.session_state.pop("song", None)
+        st.session_state.pop("artist", None)
+
         st.rerun()
 
+
 # --------------------------------------------------
-# 하단
+# 하단 문구
 # --------------------------------------------------
 
 st.markdown(
