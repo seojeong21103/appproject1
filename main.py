@@ -292,36 +292,143 @@ if "song" in st.session_state:
 
     st.markdown("### 💖 오늘의 추천 음악")
 
-    st.markdown(
-        f"""
-        <div class="music-card">
+    # --------------------------------------------------
+    # 음악 썸네일 가져오기
+    # --------------------------------------------------
 
-            <div style="font-size:55px;">
+    import requests
+
+    artwork_url = None
+
+    try:
+        search_url = "https://itunes.apple.com/search"
+
+        params = {
+            "term": f"{song} {artist}",
+            "media": "music",
+            "entity": "song",
+            "limit": 1
+        }
+
+        response = requests.get(
+            search_url,
+            params=params,
+            timeout=5
+        )
+
+        if response.status_code == 200:
+            data = response.json()
+
+            if data.get("results"):
+                artwork_url = data["results"][0].get(
+                    "artworkUrl100"
+                )
+
+                if artwork_url:
+                    artwork_url = artwork_url.replace(
+                        "100x100",
+                        "600x600"
+                    )
+
+    except Exception:
+        artwork_url = None
+
+    # --------------------------------------------------
+    # 썸네일 표시
+    # --------------------------------------------------
+
+    if artwork_url:
+
+        st.markdown(
+            f"""
+            <div style="
+                display:flex;
+                justify-content:center;
+                margin:20px 0;
+            ">
+                <img src="{artwork_url}"
+                     style="
+                     width:220px;
+                     height:220px;
+                     object-fit:cover;
+                     border-radius:25px;
+                     box-shadow:0 10px 30px rgba(0,0,0,0.18);
+                     ">
+            </div>
+            """,
+            unsafe_allow_html=True
+        )
+
+    else:
+
+        st.markdown(
+            """
+            <div style="
+                width:220px;
+                height:220px;
+                margin:20px auto;
+                border-radius:25px;
+                background:rgba(255,255,255,0.7);
+                display:flex;
+                align-items:center;
+                justify-content:center;
+                font-size:70px;
+                box-shadow:0 10px 30px rgba(0,0,0,0.12);
+            ">
                 🎵
             </div>
+            """,
+            unsafe_allow_html=True
+        )
 
-            <div class="music-title">
-                {song}
-            </div>
+    # --------------------------------------------------
+    # 음악 정보 카드
+    # --------------------------------------------------
 
-            <div class="artist">
-                {artist}
-            </div>
+    st.markdown(
+        f"""
+<div class="music-card">
 
-            <div class="reason">
-                💭 현재 기분은 <b>{st.session_state["mood"]}</b><br>
-                🔋 컨디션은 <b>{st.session_state["energy"]}</b><br>
-                🎶 원하는 분위기는 <b>{st.session_state["style"]}</b>
-            </div>
+    <div class="music-title">
+        {song}
+    </div>
 
-        </div>
+    <div class="artist">
+        {artist}
+    </div>
+
+    <div class="reason">
+        💭 현재 기분은 <b>{st.session_state["mood"]}</b><br>
+        🔋 컨디션은 <b>{st.session_state["energy"]}</b><br>
+        🎶 원하는 분위기는 <b>{st.session_state["style"]}</b>
+    </div>
+
+</div>
         """,
         unsafe_allow_html=True
     )
 
+    # --------------------------------------------------
+    # 음악 검색
+    # --------------------------------------------------
+
     search_query = f"{song} {artist}".replace(" ", "+")
 
     st.link_button(
+        "🎧 이 음악 검색해서 듣기",
+        f"https://www.youtube.com/results?search_query={search_query}",
+        use_container_width=True
+    )
+
+    # --------------------------------------------------
+    # 다른 음악
+    # --------------------------------------------------
+
+    if st.button(
+        "🔄 다른 음악 추천",
+        use_container_width=True
+    ):
+        st.rerun()
         "🎧 이 음악 검색해서 듣기",
         f"https://www.youtube.com/results?search_query={search_query}",
         use_container_width=True
